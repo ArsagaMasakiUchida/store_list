@@ -8,6 +8,9 @@ import android.widget.TextView
 import com.github.kittinunf.fuel.httpGet
 
 import kotlinx.coroutines.experimental.*
+import com.google.gson.*
+import com.google.gson.reflect.TypeToken
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
 
