@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Task</string>
+    <string name="search_button">検索</string>
+    <string name="home_button">ホーム</string>
+    <string name="radio_button_store_name">店名</string>
+    <string name="radio_button_station_name">駅名</string>
+    <string name="radio_button_distance">距離</string>
+    <string name="hint_text_search">search...</string>
+</resources>
