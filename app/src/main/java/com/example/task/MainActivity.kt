@@ -66,3 +66,13 @@ class MainActivity : AppCompatActivity() {
 enum class Type {
     storeName, stationName, Distance;
 }
+
+data class StoreApiResponse(val results: StoreApiResults) {
+}
+data class StoreApiResults(
+    val results_start: Int,
+    val results_returned: String,
+    val api_version: String,
+    val shop: List<String>,
+    val results_available: Int) {
+}
