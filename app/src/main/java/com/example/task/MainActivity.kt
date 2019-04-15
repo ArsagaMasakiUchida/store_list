@@ -5,12 +5,16 @@ import android.os.Bundle
 import android.provider.Contacts
 import android.widget.Button
 import android.widget.TextView
+import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.httpGet
 
 import kotlinx.coroutines.experimental.*
-import com.google.gson.*
+
+import com.beust.klaxon.*
+import com.beust.klaxon.JsonObject
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.google.gson.Gson
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun renderList(strSearchText: String){
-
         var result_list = runBlocking{ search(Type.storeName, strSearchText) }
 
         setContentView(R.layout.list_shop)
@@ -45,8 +48,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    //Modelの置くべき場所がわからないため
-    private suspend fun search(type: Type, input: String): String? {
+
+    private suspend fun search(type: Type, input: String): Response {
 
         var uri = when (type) {
             Type.storeName -> "${base_uri}name_any=${input}"
@@ -54,8 +57,13 @@ class MainActivity : AppCompatActivity() {
             Type.Distance -> "${base_uri}"
         }
         var result = async{
-            uri.httpGet().responseString().second.toString()
+            val res = uri.httpGet().response().second
+            val str_res_body = String(res.data)
+            val gson = GsonBuilder().setPrettyPrinting().create()
+            val res_body: Map<String, Any> = gson.fromJson(str_res_body, object : TypeToken<Map<String, Any>>() {}.type)
+            res
         }
+
         return result.await()
 
     }
@@ -65,14 +73,4 @@ class MainActivity : AppCompatActivity() {
 
 enum class Type {
     storeName, stationName, Distance;
-}
-
-data class StoreApiResponse(val results: StoreApiResults) {
-}
-data class StoreApiResults(
-    val results_start: Int,
-    val results_returned: String,
-    val api_version: String,
-    val shop: List<String>,
-    val results_available: Int) {
 }
